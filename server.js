@@ -1,14 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = 5000
+const port = process.env.PORT || 5000
 const mongoose = require('mongoose');
+const connectDB = require('./src/config/dataBase');
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ "status": "okay" });
+    res.status(200).json({ status: 'ok' })
 });
 
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+connectDB().then(() => {
+  app.listen(port , () => {
+    console.log(`Sever is listening on port ${port}...`)
+  })
+})
