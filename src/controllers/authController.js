@@ -1,6 +1,7 @@
 const User = require('../models/user.js')
 const generateToken = require('../utils/generateToken.js')
 
+
 const signup = async (req, res) => {
     try {
         const {name, email, password} = req.body
@@ -42,5 +43,19 @@ const login = async (req, res) => {
     }
 }
 
+const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId)
 
-module.exports = { signup , login };
+    if(user === null){
+        res.status(404).json({message: 'Unable to find'})
+        return
+    }
+    res.status(200).json({details: user})
+  } catch(err) {
+    res.status(500).json({ message: 'Something went wrong!', error: err.message });
+  }
+}
+
+
+module.exports = { signup, login, getMe};
