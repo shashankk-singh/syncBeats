@@ -5,6 +5,7 @@ const port = process.env.PORT || 5000
 const mongoose = require('mongoose');
 const cors = require('cors')
 const authRoutes = require('./src/routes/auth')
+const roomRoutes = require('./src/routes/room')
 const connectDB = require('./src/config/dataBase');
 
 app.get('/health', (req, res) => {
@@ -14,6 +15,7 @@ app.get('/health', (req, res) => {
 app.use(express.json());
 app.use(cors())
 app.use('/api/auth', authRoutes);
+app.use('/api', roomRoutes);
 
 
 connectDB().then(() => {
