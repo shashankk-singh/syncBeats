@@ -16,7 +16,7 @@ const signup = async (req, res) => {
         const token = generateToken(newUser._id)
         const plainObject = newUser.toJSON()
         delete plainObject.password
-        res.status(201).json({ message: `User ${name} registered successfully`, details: plainObject , token: token})
+        res.status(201).json({ message: `${name} registered successfully`, details: plainObject , token: token})
 
 
     }catch(err){

@@ -8,14 +8,13 @@ const userSchema = new mongoose.Schema({
     avatar: {type: String , required: false},
 }, { timestamps: true })
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function() {
   if(!this.isModified('password')){
-    return next();
+    return
   }
 
   const salt = await bcryptjs.genSalt(10)
   this.password = await bcryptjs.hash(this.password , salt);
-  next();
 })
 
 userSchema.methods.comparePasswords = async function(enteredPassword) {

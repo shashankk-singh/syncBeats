@@ -18,6 +18,6 @@ app.use('/api/auth', authRoutes);
 
 connectDB().then(() => {
   app.listen(port , () => {
-    console.log(`Sever is listening on port ${port}...`)
+    console.log(`Server is listening on port ${port}...`)
   })
 })
