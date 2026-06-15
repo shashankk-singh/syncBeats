@@ -1,3 +1,4 @@
+const { get } = require('mongoose')
 const Room = require('../models/room')
 const generateRoomCode = require('../utils/generateRoomCode')
 
@@ -22,4 +23,15 @@ const createRoom = async (req, res) => {
     }
 }
 
-module.exports = createRoom;
+const getMyRooms = async (req, res) => {
+    try {
+        const rooms = await Room.find({host: req.userId}, {name: 1, code: 1, createdAt: 1 , _id: 0 })
+        .sort({createdAt: -1})
+        
+         res.status(200).json({rooms})
+    } catch (err) {
+        res.status(500).json({ message: 'something went wrong' })
+    }
+}
+
+module.exports = {createRoom, getMyRooms};
