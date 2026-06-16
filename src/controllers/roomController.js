@@ -34,4 +34,18 @@ const getMyRooms = async (req, res) => {
     }
 }
 
-module.exports = {createRoom, getMyRooms};
+
+const getRoomByCode = async(req, res) => {
+    const roomCode = req.params.code
+    try{
+        const room = await Room.findOne({code: roomCode}).populate('host', 'name')
+        if (!room){
+            return res.status(404).json({message: `Room not found`})
+        }
+        return res.status(200).json({details: { name: room.name, code: room.code, host: room.host.name }})
+    }catch(err){
+        res.status(500).json({message: 'something went wrong'})
+    }
+}
+
+module.exports = {createRoom, getMyRooms, getRoomByCode};
