@@ -1,5 +1,5 @@
 const rooms = {}
-const socketRoomMap = {}
+const socketRoomMap = {} //maps socketId --> roomCode
 const addUserToRoom = (roomCode, userObj) => {
    
     if(!rooms[roomCode]){
@@ -24,6 +24,10 @@ const removeUserBySocketId = (socketId) => {
     return roomCode
 }
 
+const getRoomCodeBySocketId = (socketId) => {
+    return socketRoomMap[socketId] || null
+}
+
 const getRoomState = (roomCode) => {
     return rooms[roomCode] || null
 }
@@ -36,5 +40,5 @@ const updateQueue = (roomCode, newQueue) => {
    return rooms[roomCode].queue = newQueue
 }
 
-module.exports = {addUserToRoom, removeUserBySocketId, getRoomState, updateQueue, updatePlayback}
+module.exports = {addUserToRoom, removeUserBySocketId, getRoomState, updateQueue, updatePlayback, getRoomCodeBySocketId}
 

@@ -1,5 +1,5 @@
 const { verify } = require('jsonwebtoken');;
-
+const roomHandlers = require('../sockets/handlers/roomHandlers')
 
 module.exports = (io) =>{
     io.use((socket, next) => {                 //.use() use for middleware
@@ -19,6 +19,8 @@ module.exports = (io) =>{
 
     io.on("connection", (socket) => {
         console.log("yeahh we are connected through sockets now!!!")
+        roomHandlers(io, socket) 
     })
-}
+
+}   
 
