@@ -12,12 +12,19 @@ const joinRoom = async (socket, roomCode) => {
         return
     }
     const user = await User.findById(socket.userId).select({name: 1}) //socket.userId is  mongo _id
+    if(!user){
+        socket.emit('room-error', {message: `Something went wrong`})
+        return
+    }
 
     //Autoleave other rooms before joining new room
-    let oldRoomCode = removeUserBySocketId(socket.id)
-    if( oldRoomCode !== null){
-        socket.broadcast.to(oldRoomCode).emit('user-left', {message: `${user.name}-left`})
-    }
+    // Only broadcast if old room still exists in memory
+    // — if this socket was the last user, removeUserBySocketId already deleted the room
+    // and there's no one left to notify anyway 
+    let oldRoomCode = removeUserBySocketId(socket.id)                               
+    if(oldRoomCode && getRoomState(oldRoomCode)){
+    socket.broadcast.to(oldRoomCode).emit('user-left', {message: `${user.name}-left`})
+}
 
     addUserToRoom(roomCode, { socketId: socket.id, userId: socket.userId, username: user.name })
     socket.join(roomCode) 
@@ -33,7 +40,9 @@ const leaveRoom = (socket) => {
     const roomCode = getRoomCodeBySocketId(socket.id)
     if(!roomCode) return
     const state = getRoomState(roomCode)
-    const username = state.users.find(u => u.socketId === socket.id).username
+    const user = state.users.find(u => u.socketId === socket.id)
+    if(!user) return
+    const username = user.username
     removeUserBySocketId(socket.id)
     socket.leave(roomCode)
     socket.broadcast.to(roomCode).emit('user-left', {message: `${username}-left`})

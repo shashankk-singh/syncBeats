@@ -33,11 +33,19 @@ const getRoomState = (roomCode) => {
 }
 
 const updatePlayback = (roomCode, patch) => {
-    Object.assign(rooms[roomCode].playback, patch)
+    const room = rooms[roomCode]
+    if(!room){
+        return
+    }
+    Object.assign(room.playback, patch)
 }
 
 const updateQueue = (roomCode, newQueue) => {
-   return rooms[roomCode].queue = newQueue
+    const room = rooms[roomCode]
+    if(!room){
+        return
+    }
+   return room.queue = newQueue
 }
 
 module.exports = {addUserToRoom, removeUserBySocketId, getRoomState, updateQueue, updatePlayback, getRoomCodeBySocketId}
