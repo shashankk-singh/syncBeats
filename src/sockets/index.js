@@ -1,5 +1,7 @@
-const { verify } = require('jsonwebtoken');;
-const roomHandlers = require('../sockets/handlers/roomHandlers')
+const { verify } = require('jsonwebtoken');
+const roomHandlers = require('../sockets/handlers/roomHandlers');
+const chatHandlers = require('../sockets/handlers/chatHandlers');
+const playbackHandlers = require('./handlers/playbackHandlers');
 
 module.exports = (io) =>{
     io.use((socket, next) => {                 //.use() use for middleware
@@ -19,7 +21,10 @@ module.exports = (io) =>{
 
     io.on("connection", (socket) => {
         console.log("yeahh we are connected through sockets now!!!")
-        roomHandlers(io, socket) 
+        roomHandlers(io, socket)
+        chatHandlers(io,socket)
+        playbackHandlers(io, socket)
+
     })
 
 }   
