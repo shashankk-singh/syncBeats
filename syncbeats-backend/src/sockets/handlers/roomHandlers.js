@@ -33,7 +33,7 @@ const joinRoom = async (socket, roomCode) => {
     socket.emit("sync-state", getRoomState(roomCode))
 
 
-    socket.broadcast.to(roomCode).emit('user-joined', {message: `${user.name}-joined`})
+    socket.broadcast.to(roomCode).emit('user-joined', {message: `${user.name}-joined`, state: getRoomState(roomCode)})
 }
 
 const leaveRoom = (socket) => {
@@ -45,7 +45,7 @@ const leaveRoom = (socket) => {
     const username = user.username
     removeUserBySocketId(socket.id)
     socket.leave(roomCode)
-    socket.broadcast.to(roomCode).emit('user-left', {message: `${username}-left`})
+    socket.broadcast.to(roomCode).emit('user-left', {message: `${username}-left`, state: getRoomState(roomCode)})
 }
 
 module.exports = (io, socket) => {

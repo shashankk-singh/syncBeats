@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import useSocket from '../hooks/useSocket'
+import UsersList from '../components/UsersList'
 
 function Room() {
   const [users, setUsers] = useState([])
@@ -24,7 +25,14 @@ function Room() {
     })
 
     socket.on('user-joined', (data) => {
+      setUsers(data.state.users)
       console.log('User joined')
+    })
+
+    socket.on('user-left', (data) => {
+      setUsers(data.state.users)
+      console.log('User left')
+      console.log('sync-state received:', data)
     })
 
     socket.on('new-message', (data) => {
@@ -37,13 +45,19 @@ function Room() {
     return () => {
     socket.off('sync-state')
     socket.off('user-joined')
+    socket.off('user-left')
     socket.off('new-message')
     socket.off('room-error')
   }
     
   }, [socket])
 
-  return <div>Room {code}</div>
+  return (
+  <div>
+    Room {code}
+    <UsersList users={users} />
+  </div>
+)
 }
 
 export default Room
