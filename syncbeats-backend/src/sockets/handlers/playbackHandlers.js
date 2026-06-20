@@ -22,18 +22,18 @@ const changeVideo = (socket, {videoId}) => {
     socket.to(roomCode).emit('video-changed', state.playback)
 }
 
-const addQueue = (socket, { videoId, title }) =>{
+const addQueue = (io,socket, { videoId, title, thumbnail}) =>{
     const roomCode = getRoomCodeBySocketId(socket.id)
     if(!roomCode){
         return socket.emit('room-error', { message: 'Join a room first' })
     }
     const state = getRoomState(roomCode)
-    const newQueue = [...state.queue, { videoId, title }]
+    const newQueue = [...state.queue, { videoId, title, thumbnail }]
     updateQueue(roomCode, newQueue)
-    socket.to(roomCode).emit('queue-added', newQueue)
+    io.to(roomCode).emit('queue-added', newQueue)
 }
 
-const removeQueue = (socket, {videoId}) => {
+const removeQueue = (io,socket, {videoId}) => {
     const roomCode = getRoomCodeBySocketId(socket.id)
     if(!roomCode){
         return socket.emit('room-error', { message: 'Join a room first' })
@@ -41,7 +41,7 @@ const removeQueue = (socket, {videoId}) => {
     const currentQueue = getRoomState(roomCode).queue
     const newQueue = currentQueue.filter(item => item.videoId !== videoId)
     updateQueue(roomCode, newQueue)
-    socket.to(roomCode).emit('queue-remove', newQueue)
+    io.to(roomCode).emit('queue-removed', newQueue)
 }
 
 module.exports = (io,socket) => {
@@ -59,10 +59,10 @@ module.exports = (io,socket) => {
         changeVideo(socket, { videoId })
     })
 
-    socket.on('queue-add', ({ videoId, title })=>{
-        addQueue(socket,{ videoId, title } )
+    socket.on('queue-add', ({ videoId, title, thumbnail })=>{
+        addQueue(io,socket,{ videoId, title, thumbnail } )
     })
     socket.on('queue-remove', ({ videoId }) => {
-    removeQueue(socket, { videoId })
+    removeQueue(io,socket, { videoId })
 })
 }
