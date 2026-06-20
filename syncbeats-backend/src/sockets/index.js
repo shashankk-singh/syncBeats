@@ -20,7 +20,6 @@ module.exports = (io) =>{
     })
 
     io.on("connection", (socket) => {
-        console.log("yeahh we are connected through sockets now!!!")
         roomHandlers(io, socket)
         chatHandlers(io,socket)
         playbackHandlers(io, socket)
