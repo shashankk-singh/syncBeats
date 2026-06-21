@@ -8,11 +8,13 @@ const createRoom = async (req, res) => {
             return res.status(400).json({ message: "Room name is required" })
         }
     let code;
-    do{
-        code = generateRoomCode()
-    }while((await Room.findOne({code})) !== null) //guaranteed-unique code
 
     try{
+        do{
+        code = generateRoomCode()
+        }while((await Room.findOne({code})) !== null) //guaranteed-unique code
+
+
         const host = req.userId
         const newRoom = new Room({name, code, host})
         await newRoom.save()
