@@ -5,6 +5,7 @@ import useSocket from '../hooks/useSocket'
 import UsersList from '../components/UsersList'
 import { extractVideoId } from '../../utils/extractVideoId';
 import { fetchVideoMetadata } from '../../utils/fetchVideoMetadata';
+import Player from '../components/Player';
 
 function Room() {
   const [users, setUsers] = useState([])
@@ -103,9 +104,10 @@ function Room() {
 return (
     <div>
       Room {code}
+      <div className="p-4">
+        <Player videoId="dQw4w9WgXcQ" socket={socket} />
+      </div>      
       <UsersList users={users} />
-
-      {/* Chat */}
       <div>
         {messages.map((m, index) => (
           <div key={index}>
