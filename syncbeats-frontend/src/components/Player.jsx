@@ -45,6 +45,7 @@ function Player({ videoId, socket }) {
 
 
     window.onYouTubeIframeAPIReady = function() {
+        console.log('Player creating with videoId:', videoId)
         setPlayer(new YT.Player(playerContainerRef.current, {
             height: '100%',
             width: '100%',
