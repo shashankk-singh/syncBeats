@@ -10,4 +10,4 @@ export async function fetchVideoMetadata(videoId) {
         return null
     }
 }
-fetchVideoMetadata("dQw4w9WgXcQ").then(console.log);
+

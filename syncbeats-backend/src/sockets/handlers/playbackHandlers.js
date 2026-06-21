@@ -7,6 +7,7 @@ const updateTimeStamp = (socket,eventName,patch) => {
     } 
     updatePlayback(roomCode, patch)
     const state = getRoomState(roomCode)
+    
     socket.to(roomCode).emit(`${eventName}`, state.playback)
 
 }
