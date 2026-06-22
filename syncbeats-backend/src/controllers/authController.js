@@ -6,7 +6,7 @@ const signup = async (req, res) => {
     try {
         const {name, email, password} = req.body
 
-        if(await User.findOne({email})){ // check fro existingUser
+        if(await User.findOne({email})){ // check for existingUser
             res.status(409).json({ message: 'Email should be unique'});
             return
         }

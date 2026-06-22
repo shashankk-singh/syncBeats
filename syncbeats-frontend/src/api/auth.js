@@ -8,8 +8,8 @@ export function loginUser(email, password) {
   return API.post('/auth/login', { email, password })
 }
 
-export function signupUser(email, password, username) {
-  return API.post('/auth/signup', { email, password, username })
+export function signupUser(username, email, password) {
+  return API.post('/auth/signup', { name: username, email, password })
 }
 
 export function getMe(token) {
