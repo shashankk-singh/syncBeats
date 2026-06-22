@@ -6,7 +6,7 @@ function useSocket(token) {
 
   useEffect(() => {
     if (!token) return
-    const socketInstance = io('http://localhost:5000', {
+    const socketInstance = io('http://192.168.1.21:5000', {
     auth: { token }
   })
   setSocket(socketInstance)

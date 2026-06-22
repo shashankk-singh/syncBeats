@@ -55,6 +55,11 @@ function Room() {
     
   }
 
+  function changeVideo({videoId}) {
+    if (!socket) return
+    socket.emit("video-change", {videoId})
+  }
+
   useEffect(() => {
     if (!socket) return
     socket.emit('join-room', { roomCode: code })
@@ -74,7 +79,7 @@ function Room() {
     })
 
     socket.on('new-message', (data) => {
-      setMessages(prev => [...prev, data]) //prev ensures  always calculate the new state from the most up-to-date snapshot
+      setMessages(prev => [...prev, data]) //this ensures  always calculate the new state from the most up-to-date snapshot
     })
 
     socket.on('room-error', (data) => {
@@ -89,6 +94,10 @@ function Room() {
       setQueue(data)
     })
 
+    socket.on('video-changed', (data) => {
+      setPlayback(data)
+    })
+
     return () => {
     socket.off('sync-state')
     socket.off('user-joined')
@@ -97,6 +106,7 @@ function Room() {
     socket.off('room-error')
     socket.off('queue-added')
     socket.off('queue-removed')
+    socket.off('video-changed')
   }
 
   }, [socket])
@@ -114,7 +124,7 @@ return (
 
     {/* warm glow */}
     <div className="absolute z-0 top-20 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-amber-600/10 rounded-full blur-[150px] pointer-events-none" />
-
+    
     <div className="relative z-10 max-w-6xl mx-auto">
       <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
         <div>
@@ -147,7 +157,7 @@ return (
         {/* Left Column */}
         <div className="lg:col-span-2 flex flex-col gap-6">
           <div className="rounded-2xl border border-stone-800 bg-stone-900/70 p-4 shadow-2xl shadow-black/30">
-            <Player videoId="dQw4w9WgXcQ" socket={socket} />
+            <Player videoId={queue[0]?.videoId} socket={socket} />
           </div>
 
           <div className="rounded-2xl border border-stone-800 bg-stone-900/70 p-6 shadow-2xl shadow-black/30 flex flex-col h-[420px]">
@@ -326,6 +336,7 @@ return (
                 queue.map((item) => (
                   <div
                     key={item.videoId}
+                    onClick={() => changeVideo({ videoId: item.videoId })}
                     className="
                       flex
                       items-center
@@ -336,6 +347,7 @@ return (
                       bg-stone-950/40
                       hover:bg-stone-800/60
                       transition-all
+                      cursor-pointer
                       p-2
                     "
                   >

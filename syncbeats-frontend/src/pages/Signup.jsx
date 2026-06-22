@@ -15,7 +15,7 @@ function Signup() {
     try{
       const response = await signupUser(email, password, username)
       const token = response.data.token
-      localStorage.setItem('token', token) //setitem('key' value)
+      localStorage.setItem('token', token) 
       navigate('/dashboard')
     }catch(err){
       setError(err.response?.data?.message || 'Something went wrong')

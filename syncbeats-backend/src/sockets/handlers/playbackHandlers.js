@@ -1,6 +1,7 @@
 const {getRoomState, updateQueue, updatePlayback, getRoomCodeBySocketId} = require('../state');
 
 const updateTimeStamp = (socket,eventName,patch) => {
+   
     const roomCode = getRoomCodeBySocketId(socket.id)
     if(!roomCode){
         return socket.emit('room-error', { message: 'Join a room first' })
@@ -12,15 +13,21 @@ const updateTimeStamp = (socket,eventName,patch) => {
 
 }
 
-const changeVideo = (socket, {videoId}) => {
+const changeVideo = (io,socket, {videoId}) => {
     const roomCode = getRoomCodeBySocketId(socket.id)
     if(!roomCode){
         return socket.emit('room-error', { message: 'Join a room first' })
     }
+    const currentQueue = getRoomState(roomCode).queue
+    const clickedItem = currentQueue.find(item => item.videoId == videoId)
+    const reorderedQueue = [clickedItem, ...currentQueue.filter(item => item.videoId !== videoId)]
+    updateQueue(roomCode, reorderedQueue)
+
     const patch = {videoId, timestamp: 0, isPlaying: false}
     updatePlayback(roomCode, patch)
     const state = getRoomState(roomCode)
-    socket.to(roomCode).emit('video-changed', state.playback)
+    io.to(roomCode).emit('video-changed', state.playback)
+    io.to(roomCode).emit('queue-updated', state.queue)
 }
 
 const addQueue = (io,socket, { videoId, title, thumbnail}) =>{
@@ -57,7 +64,7 @@ module.exports = (io,socket) => {
     })
 
     socket.on('video-change' , ({videoId})=>{
-        changeVideo(socket, { videoId })
+        changeVideo(io,socket, { videoId })
     })
 
     socket.on('queue-add', ({ videoId, title, thumbnail })=>{
