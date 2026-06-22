@@ -16,6 +16,7 @@ function Room() {
   const [messages, setMessages] = useState([])
   const [chatInput, setChatInput] = useState('')
   const [error, setError] = useState('')
+  const [roomName, setRoomName] = useState('')
   const { code } = useParams()
   const { token } = useAuth()
   const socket = useSocket(token)
@@ -60,9 +61,12 @@ function Room() {
     socket.emit("video-change", {videoId})
   }
 
+
+
   useEffect(() => {
     if (!socket) return
     socket.emit('join-room', { roomCode: code })
+    socket.emit('get-roomName', { roomCode: code });
 
     socket.on('sync-state', (data) => {
     setUsers(data.users)
@@ -98,6 +102,10 @@ function Room() {
       setPlayback(data)
     })
 
+    socket.on('RoomName', (data) => {
+      setRoomName(data.roomName)
+    })
+
     return () => {
     socket.off('sync-state')
     socket.off('user-joined')
@@ -129,7 +137,7 @@ return (
       <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-4xl font-bold text-stone-100 mb-1">
-            Room
+            {roomName}
           </h1>
           <p className="text-stone-500 text-sm">
             Code:{' '}

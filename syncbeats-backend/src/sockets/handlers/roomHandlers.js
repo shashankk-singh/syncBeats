@@ -48,6 +48,16 @@ const leaveRoom = (socket) => {
     socket.broadcast.to(roomCode).emit('user-left', {message: `${username}-left`, state: getRoomState(roomCode)})
 }
 
+const getRoomName = async (io,socket,roomCode) => {
+    const room = await Rooms.findOne({code: roomCode})
+    if(!room){
+        socket.emit('room-error', { message: 'Room not found' })
+        return
+    }
+    const roomName = room.name
+    io.to(roomCode).emit('RoomName' , {roomName: roomName})
+}
+
 module.exports = (io, socket) => {
     socket.on("join-room", async ({roomCode}) => { try{
         await  joinRoom(socket, roomCode)
@@ -59,5 +69,8 @@ module.exports = (io, socket) => {
     })
     socket.on("disconnect", () => {  //when user is offline auto trigger
         leaveRoom(socket)
+    })
+    socket.on("get-roomName", async({roomCode}) => {
+        await getRoomName(io,socket,roomCode)
     })
 }
