@@ -21,3 +21,9 @@ export function getRoomByCode(token, code) {
     headers: { Authorization: `Bearer ${token}` }
   })
 }
+
+export function deleteRoom(token, code) {
+  return API.delete(`/rooms/${code}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+}
