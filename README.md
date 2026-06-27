@@ -40,7 +40,7 @@ Play and pause are broadcast to all room members in real-time via Socket.io. Whe
 Paste a YouTube link, it gets added to the shared queue instantly — title and thumbnail fetched automatically via oEmbed. Anyone in the room can add or remove videos. Click any item in the queue to jump to it. The queue updates live for everyone.
 
 ### 💬 Live Chat
-Ephemeral room chat that lives and dies with the session. No accounts needed to chat, no messages stored. Type, send, react — just like a group watch party should feel.
+Ephemeral room chat that lives and dies with the session. No messages stored. Type, send, react — just like a group watch party should feel.
 
 ### 🚪 Room System
 Create a room and get a unique shareable code (e.g. `MOOD-PtZOWnD3`). Share the code, friends join, party starts. Full room state (users, queue, playback position) is synced on join — late arrivals catch up automatically.
