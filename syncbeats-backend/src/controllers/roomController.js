@@ -10,6 +10,10 @@ const createRoom = async (req, res) => {
     let code;
 
     try{
+        const count = await Room.countDocuments({ host: req.userId })
+        if (count >= 5) {
+            return res.status(400).json({ message: 'Room limit reached. Max 5 rooms allowed.' })
+        }
         do{
         code = generateRoomCode()
         }while((await Room.findOne({code})) !== null) //guaranteed-unique code
@@ -22,6 +26,25 @@ const createRoom = async (req, res) => {
             details: { id: newRoom._id, name: newRoom.name, code: newRoom.code } })
     }catch(err){
         res.status(500).json({message: 'something went wrong'})
+    }
+}
+
+const deleteRoom = async (req, res) => {
+    try{
+        const roomCode = req.params.code
+        const room = await Room.findOne({code: roomCode})
+        if (!room){
+            return res.status(404)
+        }
+        if(req.userId != room.host){
+             res.status(403).json({ message: 'only host can delete' })
+             return
+        }
+        await Room.deleteOne({code: roomCode})
+        res.status(200).json({ message: 'Room deleted' })
+
+    }catch(err){
+        res.status(500).json({ message: 'something went wrong' })
     }
 }
 
@@ -50,4 +73,4 @@ const getRoomByCode = async(req, res) => {
     }
 }
 
-module.exports = {createRoom, getMyRooms, getRoomByCode};
+module.exports = {createRoom, getMyRooms, getRoomByCode , deleteRoom};
