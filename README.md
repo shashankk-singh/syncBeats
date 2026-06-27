@@ -145,7 +145,6 @@ Open [http://localhost:5173](http://localhost:5173), create a room, share the co
 ## What's Next
 
 - Google OAuth (Sign in with Google)
-- Room limits and delete room UI
 - In-app YouTube search (no link-paste required)
 - Drag-to-reorder queue
 - Redis pub/sub for horizontal scaling
