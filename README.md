@@ -118,7 +118,7 @@ Create `syncbeats-frontend/.env`:
 
 
 ```env
-# Replace localhost with your machine's local IP (e.g. http://192.168.1.x:5000)
+# Replace localhost with your machine's local IP (e.g. http://192.168.1.x:5000) to run on your local Network
 VITE_BACKEND_URL=http://localhost:5000 
 ```
 
@@ -161,7 +161,7 @@ Open [http://localhost:5173](http://localhost:5173), create a room, share the co
 
 ## About
 
-Built by **Shashank Singh** — backend developer, GSoC contributor at Rocket.Chat.
+Built by **Shashank Singh**.
 
 SyncBeats started as an experiment in real-time architecture and became a full-stack product. The backend is where the interesting problems live: stateful WebSocket connections, in-memory room lifecycle management, echo suppression, and a clean event contract between client and server.
 
