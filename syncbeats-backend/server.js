@@ -34,6 +34,18 @@ app.use('/api/rooms', roomRoutes);
 initSockets(io)
 connectDB().then(() => {
   httpServer.listen(port , '192.168.1.21',() => {
-    console.log(`Server is listening on port ${port}...`)
+    console.log(`
+    ╔════════════════════════════════════════╗
+    ║                                        ║
+    ║       🎵  SyncBeats                    ║
+    ║                                        ║
+    ║       Port    → ${port}                   ║
+    ║       Mode    → ${process.env.NODE_ENV || 'development'}            ║
+    ║       Status  → Ready                  ║
+    ║       MongoDB → Ready                  ║
+    ║                                        ║
+    ║                                        ║
+    ╚════════════════════════════════════════╝
+  `)
   })
 })

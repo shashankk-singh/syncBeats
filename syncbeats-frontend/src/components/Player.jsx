@@ -42,7 +42,6 @@ function Player({ videoId, socket }) {
         document.body.append(tag)
         window.onYouTubeIframeAPIReady = createPlayer
     } else {
-        console.log('YT already loaded, creating directly')
         createPlayer()
     }
     }, [])
@@ -62,14 +61,13 @@ function Player({ videoId, socket }) {
     useEffect(() => {
     if (!socket) return
     socket.on('play', (data) => {
-        console.log('play received, ignoreFlag before set:', ignoreNextChange.current)
         if (!player) return
         ignoreNextChange.current = Date.now() + 1000 //1sec
         player.seekTo(data.timestamp)
         player.playVideo()
     })
     socket.on('pause', (data) => {
-        console.log('pause received, player:', !!player, 'data:', data)
+
         if (!player) return
         ignoreNextChange.current = Date.now() + 1000 
         player.seekTo(data.timestamp)
