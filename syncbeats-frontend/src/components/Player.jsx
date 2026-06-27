@@ -26,17 +26,17 @@ function Player({ videoId, socket }) {
 
     useEffect(() => {
     function createPlayer() {
-        console.log('createPlayer called, ref:', playerContainerRef.current)
-        setPlayer(new YT.Player(playerContainerRef.current, {
+        new YT.Player(playerContainerRef.current, {
             height: '100%',
             width: '100%',
-            //videoId: videoId,
-            events: { onStateChange: stateChange }
-        }))
+            events: {
+                onReady: (e) => setPlayer(e.target),
+                onStateChange: stateChange
+            }
+})
     }
 
     if (!window.YT) {
-        console.log('YT not loaded, appending script')
         const tag = document.createElement('script')
         tag.src = "https://www.youtube.com/iframe_api"
         document.body.append(tag)
