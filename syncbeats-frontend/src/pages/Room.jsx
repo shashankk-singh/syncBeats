@@ -102,6 +102,10 @@ function Room() {
       setPlayback(data)
     })
 
+    socket.on('queue-updated', (data) => {
+      setQueue(data)
+    })
+
     socket.on('RoomName', (data) => {
       setRoomName(data.roomName)
     })
@@ -115,6 +119,7 @@ function Room() {
     socket.off('queue-added')
     socket.off('queue-removed')
     socket.off('video-changed')
+    socket.off('queue-updated')
   }
 
   }, [socket])
