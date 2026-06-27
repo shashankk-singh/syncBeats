@@ -35,8 +35,16 @@ return (
 
     {/* subtle warm glow behind the card */}
     <div className="absolute z-0 top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-amber-600/10 rounded-full blur-[120px] pointer-events-none" />
-
     <div className="relative z-10 w-full max-w-md rounded-2xl border border-stone-800 bg-stone-900/70 p-8 shadow-2xl shadow-black/40">
+      <svg xmlns="http://www.w3.org/2000/svg" width="330" height="62" viewBox="0 0 400 120" className="mb-6 -ml-19">
+        <circle cx="60" cy="60" r="38" fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="6 4"/>
+        <rect x="42" y="38" width="5" height="44" rx="2.5" fill="#f59e0b" opacity="0.5"/>
+        <rect x="51" y="28" width="5" height="64" rx="2.5" fill="#f59e0b" opacity="0.75"/>
+        <rect x="60" y="46" width="5" height="28" rx="2.5" fill="#f59e0b"/>
+        <rect x="69" y="34" width="5" height="52" rx="2.5" fill="#f59e0b" opacity="0.75"/>
+        <rect x="78" y="42" width="5" height="36" rx="2.5" fill="#f59e0b" opacity="0.5"/>
+        <text x="115" y="75" fontFamily="system-ui, sans-serif" fontSize="36" fontWeight="500" fill="#f5f0e8">SyncBeats</text>
+      </svg>
       <h1 className="text-stone-100 text-3xl font-bold mb-1">
         Create account
       </h1>
