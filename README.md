@@ -114,6 +114,13 @@ PORT=5000
 MONGO_URI=mongodb://localhost:27017/syncbeats
 JWT_SECRET=your_secret_here
 ```
+Create `syncbeats-frontend/.env`:
+
+
+```env
+# Replace localhost with your machine's local IP (e.g. http://192.168.1.x:5000)
+VITE_BACKEND_URL=http://localhost:5000 
+```
 
 ### Run
 

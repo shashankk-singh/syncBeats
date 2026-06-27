@@ -6,7 +6,7 @@ function useSocket(token) {
 
   useEffect(() => {
     if (!token) return
-    const socketInstance = io('http://192.168.1.21:5000', {
+    const socketInstance = io(import.meta.env.VITE_BACKEND_URL, {
     auth: { token }
   })
   setSocket(socketInstance)

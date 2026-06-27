@@ -33,7 +33,7 @@ app.use('/api/rooms', roomRoutes);
 
 initSockets(io)
 connectDB().then(() => {
-  httpServer.listen(port , '192.168.1.21',() => {
+  httpServer.listen(port, () => {
     console.log(`
     ╔════════════════════════════════════════╗
     ║                                        ║
