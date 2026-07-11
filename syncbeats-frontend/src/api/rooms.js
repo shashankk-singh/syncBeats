@@ -1,29 +1,22 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`
+  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`,
+  withCredentials: true
 })
 
-export function getMyRooms(token) {
-  return API.get('/rooms/my', {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+export function getMyRooms() {
+  return API.get('/rooms/my')
 }
 
-export function createRoom(token, name) {
-  return API.post('/rooms', {name}, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+export function createRoom(name) {
+  return API.post('/rooms', {name})
 }
 
-export function getRoomByCode(token, code) {
-  return API.get(`/rooms/${code}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+export function getRoomByCode(code) {
+  return API.get(`/rooms/${code}`)
 }
 
-export function deleteRoom(token, code) {
-  return API.delete(`/rooms/${code}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+export function deleteRoom(code) {
+  return API.delete(`/rooms/${code}`)
 }
