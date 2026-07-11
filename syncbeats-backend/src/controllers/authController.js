@@ -1,6 +1,7 @@
 const User = require('../models/user.js')
 const generateToken = require('../utils/generateToken.js')
-
+const generateRefreshToken = require('../utils/generateRefreshToken.js')
+const jwt = require('jsonwebtoken')
 
 const signup = async (req, res) => {
     try {
@@ -13,10 +14,28 @@ const signup = async (req, res) => {
 
         const newUser = new User({name, email, password})
         await newUser.save() 
-        const token = generateToken(newUser._id)
+        
+        const accessToken = generateToken(newUser._id)
+        const refreshToken = generateRefreshToken(newUser._id)
+
+        res.cookies('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: 15 * 60 * 1000
+        })
+
+        res.cookies('refreshToken', refreshToken, {
+            path: '/api/auth/refresh',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: 30 * 24 * 60 * 60 * 1000
+        })
+        
         const plainObject = newUser.toJSON()
         delete plainObject.password
-        res.status(201).json({ message: `${name} registered successfully`, details: plainObject , token: token})
+        res.status(201).json({ message: `${name} registered successfully`, details: plainObject})
 
 
     }catch(err){
@@ -32,16 +51,79 @@ const login = async (req, res) => {
             res.status(401).json({message: 'Invalid email or password. Please try again'})
             return
         }
-        const token = generateToken(user._id)
+        const accessToken = generateToken(user._id)
+        const refreshToken = generateRefreshToken(user._id)
+
+        res.cookies('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: 15 * 60 * 1000
+        })
+
+        res.cookies('refreshToken', refreshToken, {
+            path: '/api/auth/refresh',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: 30 * 24 * 60 * 60 * 1000
+        })
+
         const plainObject = user.toJSON()
         delete plainObject.password
-        res.status(200).json({ message: `welcome Back! ${user.name}`, details: plainObject , token: token})
+        res.status(200).json({ message: `welcome Back! ${user.name}`, details: plainObject})
 
     }catch(err){
         res.status(500).json({ message: 'Something went wrong!', error: err.message });
 
     }
 }
+
+const logout = (req, res) =>{
+    try{
+        res.clearCookie('accessToken', { path: '/' })
+        res.clearCookie('refreshToken', { path: '/api/auth/refresh' })
+        res.status(200).json({ message: 'Log Out Successfully'})
+    }catch(err){
+        res.status(500).json({ message: 'Something went wrong!', error: err.message })
+    }
+
+
+}
+
+const refresh = (req, res) => {
+    try{
+       const refreshToken = req.cookies.refreshToken
+       if(!refreshToken){ 
+          return res.status(401).json({message: 'No refresh token, please login again'})
+      }
+      const decoded = jwt.verify(refreshToken , process.env.JWT_SECRET)
+
+      if(!decoded){ 
+        return res.status(401).json({message: 'No refresh token, please login again'})
+         
+      }
+      if(decoded.type !== 'refresh'){
+        return res.status(401).json({message: 'Not a refreshToken'})
+      }
+      const accessToken = generateToken(decoded.userId)
+      res.cookies('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: 15 * 60 * 1000
+        })
+      res.status(200).json({ message: `welcome Back!`})
+
+
+    }catch(err){
+        if (err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError') {
+        return res.status(401).json({ message: 'Invalid or expired refresh token, please login again' })
+     }
+      res.status(500).json({ message: 'Something went wrong!', error: err.message })
+    }
+}
+
 
 const getMe = async (req, res) => {
   try {
@@ -58,4 +140,4 @@ const getMe = async (req, res) => {
 }
 
 
-module.exports = { signup, login, getMe};
+module.exports = { signup, login, getMe, refresh, logout};
