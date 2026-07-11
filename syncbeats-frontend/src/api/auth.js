@@ -9,13 +9,7 @@
 // cors({ credentials: true, origin: <specific origin> }) — can't use
 // origin: '*' together with credentials, browsers reject that combo.
 
-import axios from 'axios'
-
-const API = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`,
-  withCredentials: true
-
-})
+import API from './axiosInstance'
 
 export function loginUser(email, password) {
   return API.post('/auth/login', { email, password })
