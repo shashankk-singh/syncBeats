@@ -1,17 +1,22 @@
+const { parse } = require('cookie')
 const { verify } = require('jsonwebtoken');
 const roomHandlers = require('../sockets/handlers/roomHandlers');
 const chatHandlers = require('../sockets/handlers/chatHandlers');
 const playbackHandlers = require('./handlers/playbackHandlers');
 
 module.exports = (io) =>{
-    io.use((socket, next) => {                 //.use() use for middleware
-        const token = socket.handshake.auth.token || socket.handshake.headers.token
-        // did this because postman did not have the auth section so i have to create a custom header therfore req was header.token instead of auth.token
-        if(!token){
+    io.use((socket, next) => { 
+        if (!socket.handshake.headers.cookie) {
             return next(new Error("Unauthorized"))
-        }
+        }  
+
+        const response = parse(socket.handshake.headers.cookie)
+        const accessToken = response.accessToken
         try{
-            const decoded = verify(token, process.env.JWT_SECRET)
+            const decoded = verify(accessToken, process.env.JWT_SECRET)
+            if (decoded.type !== 'access') {
+              return next(new Error("Unauthorized"))
+            }
             socket.userId = decoded.userId
             next()
         }catch(err){

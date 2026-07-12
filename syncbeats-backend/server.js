@@ -14,15 +14,17 @@ const connectDB = require('./src/config/dataBase')
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 
+const allowedOrigins = process.env.FRONTEND_URLS?.split(',') || ['http://localhost:5173']
+
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
   cors: {
-    origin: "*"
+    origin: allowedOrigins,
+    credentials: true
   }
 });
 
 
-const allowedOrigins = process.env.FRONTEND_URLS?.split(',') || ['http://localhost:5173']
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' })
 });

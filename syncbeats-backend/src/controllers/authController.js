@@ -127,7 +127,7 @@ const refresh = (req, res) => {
 
 const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.userId)
+    const user = await User.findById(req.userId).select('-password')
 
     if(user === null){
         res.status(404).json({message: 'Unable to find'})

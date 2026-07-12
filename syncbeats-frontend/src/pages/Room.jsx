@@ -18,8 +18,9 @@ function Room() {
   const [error, setError] = useState('')
   const [roomName, setRoomName] = useState('')
   const { code } = useParams()
-  const { token } = useAuth()
-  const socket = useSocket(token)
+  const { userId, isLoading, error } = useAuth()
+  const isAuthenticated = !isLoading && !!userId
+  const socket = useSocket(isAuthenticated)
 
   function sendMessage() {
     if (!socket) return
