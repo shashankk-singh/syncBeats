@@ -19,6 +19,10 @@ export function signupUser(username, email, password) {
   return API.post('/auth/signup', { name: username, email, password })
 }
 
+export function logoutUser(){
+  return API.post('/auth/logout')
+}
+
 export function getMe() {
   return API.get('/auth/me')
 }

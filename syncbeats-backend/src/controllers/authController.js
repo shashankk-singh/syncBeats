@@ -54,14 +54,14 @@ const login = async (req, res) => {
         const accessToken = generateToken(user._id)
         const refreshToken = generateRefreshToken(user._id)
 
-        res.cookies('accessToken', accessToken, {
+        res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
             maxAge: 15 * 60 * 1000
         })
 
-        res.cookies('refreshToken', refreshToken, {
+        res.cookie('refreshToken', refreshToken, {
             path: '/api/auth/refresh',
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -75,6 +75,7 @@ const login = async (req, res) => {
 
     }catch(err){
         res.status(500).json({ message: 'Something went wrong!', error: err.message });
+        console.log(err.message)
 
     }
 }

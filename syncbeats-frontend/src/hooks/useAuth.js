@@ -4,7 +4,7 @@ import { getMe } from '../api/auth'
 function useAuth() {
   const [userId, setUserId] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [authError, setAuthError] = useState('')
 
   useEffect(() => {
     async function fetchUser() {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { resolvePath, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { getMyRooms, createRoom, deleteRoom } from '../api/rooms'
 import { logoutUser } from '../api/auth'
 

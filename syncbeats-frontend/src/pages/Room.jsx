@@ -18,7 +18,7 @@ function Room() {
   const [error, setError] = useState('')
   const [roomName, setRoomName] = useState('')
   const { code } = useParams()
-  const { userId, isLoading, error } = useAuth()
+  const { userId, isLoading, authError } = useAuth()
   const isAuthenticated = !isLoading && !!userId
   const socket = useSocket(isAuthenticated)
 
@@ -124,6 +124,28 @@ function Room() {
   }
 
   }, [socket])
+  if (isLoading) {
+  return (
+    <div className="min-h-screen bg-[#15120d] p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 max-w-6xl mx-auto animate-pulse">
+        <div className="flex flex-col gap-4">
+          <div className="h-56 rounded-2xl bg-stone-800/60" />
+          <div className="h-40 rounded-2xl bg-stone-800/60 p-4 space-y-3">
+            <div className="h-3 w-2/3 rounded bg-stone-700/60" />
+            <div className="h-3 w-1/2 rounded bg-stone-700/60" />
+            <div className="h-3 w-3/5 rounded bg-stone-700/60" />
+          </div>
+        </div>
+        <div className="rounded-2xl bg-stone-800/60 p-4 space-y-3">
+          <div className="h-3 w-1/3 rounded bg-stone-700/60" />
+          <div className="h-9 rounded-xl bg-stone-700/60" />
+          <div className="h-9 rounded-xl bg-stone-700/60" />
+          <div className="h-9 rounded-xl bg-stone-700/60" />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 return (
   <div className="min-h-screen bg-[#15120d] relative px-4 py-10 overflow-hidden">
