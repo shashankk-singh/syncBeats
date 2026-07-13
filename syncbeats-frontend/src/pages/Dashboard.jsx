@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getMyRooms, createRoom, deleteRoom } from '../api/rooms'
+import { logoutUser } from '../api/auth'
 
 
 function Dashboard() {
@@ -9,12 +10,12 @@ function Dashboard() {
   const [joinCode, setJoinCode] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
-  const token = localStorage.getItem('token')
+ 
 
   useEffect(() => {         //useEffect can't be async directly thereffore need a async function inside it
     async function fetchRooms() {
       try{
-        const response = await getMyRooms(token)
+        const response = await getMyRooms()
         setRooms(response.data.rooms)
       }catch(err){
         setError(err.response?.data?.message || 'Something went wrong')
@@ -24,7 +25,7 @@ function Dashboard() {
   }, [])
 
   async function handleCreateRoom() {
-    try{const response = await createRoom(token, roomName)
+    try{const response = await createRoom(roomName)
     const roomCode = response.data.details.code
     navigate(`/room/${roomCode}`)
     }catch(err){
@@ -38,12 +39,21 @@ function Dashboard() {
 
   async function handleDeleteRoom(code) {
     try{
-      const response = await deleteRoom(token, code)
+      const response = await deleteRoom(code)
       setRooms(prev => prev.filter(r => r.code !== code))
     }catch(err){
       setError(err.response?.data?.message || 'Something went wrong')
     }
   }
+
+  async function handleLogout() {
+    try{
+      const response = await logoutUser()
+      navigate('/')
+      
+    }catch(err){setError(err.response?.data?.message || 'Something went wrong')}
+  }
+
 
 return (
   <div className="min-h-screen bg-[#15120d] relative px-4 py-10 overflow-hidden">
@@ -73,6 +83,37 @@ return (
           </svg>
           <p className="text-stone-300 text-sm font-medium tracking-wide">Manage your rooms and keep the party going.</p>
         </div>
+
+        <button
+          onClick={handleLogout}
+          className="
+            flex items-center gap-2
+            rounded-full
+            border border-stone-800
+            bg-stone-900/70
+            px-4 py-2
+            text-sm text-stone-400
+            hover:text-stone-100
+            hover:border-stone-700
+            transition-all
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="w-4 h-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V6a3 3 0 013-3h4a3 3 0 013 3v1"
+            />
+          </svg>
+          Log out
+        </button>
       </div>
 
       {error && (

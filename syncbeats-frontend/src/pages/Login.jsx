@@ -12,8 +12,6 @@ function Login() {
   async function handleSubmit() {
     try {
       const response = await loginUser(email, password)
-      const token = response.data.token
-      localStorage.setItem('token', token)
       navigate('/dashboard')
     } catch(err) {
       setError(err.response?.data?.message || 'Something went wrong')

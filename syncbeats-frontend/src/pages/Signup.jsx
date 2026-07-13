@@ -14,8 +14,6 @@ function Signup() {
   async function handleSubmit() {
     try{
       const response = await signupUser(username, email, password)
-      const token = response.data.token
-      localStorage.setItem('token', token) 
       navigate('/dashboard')
     }catch(err){
       setError(err.response?.data?.message || 'Something went wrong')

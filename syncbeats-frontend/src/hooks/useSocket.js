@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 
-function useSocket(token) {
+function useSocket(isAuthenticated) {
   const [socket, setSocket] = useState(null)
 
   useEffect(() => {
-    if (!token) return
+    if (!isAuthenticated) return
     const socketInstance = io(import.meta.env.VITE_BACKEND_URL, {
-    auth: { token }
+    withCredentials: true
   })
   setSocket(socketInstance)
   
   return () => {
     socketInstance.disconnect()
   }
-  }, [token])
+  }, [isAuthenticated])
 
   return socket
 }

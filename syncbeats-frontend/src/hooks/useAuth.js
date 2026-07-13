@@ -1,19 +1,27 @@
-import { jwtDecode } from 'jwt-decode'
-
+import { useEffect, useState } from 'react'
+import { getMe } from '../api/auth'
 
 function useAuth() {
-  const token = localStorage.getItem('token')
-  if(!token){
-    return { token: null, userId: null }
-  }
-  let userId = null
-  try{
-    const decode = jwtDecode(token)
-    userId = decode.userId
-  }catch(err){
-    console.log('Invalid token')
-  }
-  return {token, userId}
+  const [userId, setUserId] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [authError, setAuthError] = useState('')
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await getMe()
+        setUserId(response.data.details._id)
+      } catch (err) {
+        setError('User not logged in')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchUser()
+  }, [])
+
+  return { userId, isLoading, error }
 }
 
 export default useAuth
