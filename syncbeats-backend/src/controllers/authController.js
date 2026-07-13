@@ -18,14 +18,14 @@ const signup = async (req, res) => {
         const accessToken = generateToken(newUser._id)
         const refreshToken = generateRefreshToken(newUser._id)
 
-        res.cookies('accessToken', accessToken, {
+        res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
             maxAge: 15 * 60 * 1000
         })
 
-        res.cookies('refreshToken', refreshToken, {
+        res.cookie('refreshToken', refreshToken, {
             path: '/api/auth/refresh',
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
