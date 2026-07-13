@@ -21,7 +21,7 @@ function useAuth() {
     fetchUser()
   }, [])
 
-  return { userId, isLoading, error }
+  return { userId, isLoading, authError }
 }
 
 export default useAuth
