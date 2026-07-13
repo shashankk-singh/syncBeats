@@ -1,4 +1,4 @@
-const { parse } = require('cookie')
+const { parseCookie } = require('cookie')
 const { verify } = require('jsonwebtoken');
 const roomHandlers = require('../sockets/handlers/roomHandlers');
 const chatHandlers = require('../sockets/handlers/chatHandlers');
@@ -10,8 +10,8 @@ module.exports = (io) =>{
             return next(new Error("Unauthorized"))
         }  
 
-        const response = parse(socket.handshake.headers.cookie)
-        const accessToken = response.accessToken
+        const cookies = parseCookie(socket.handshake.headers.cookie)
+        const accessToken = cookies.accessToken
         try{
             const decoded = verify(accessToken, process.env.JWT_SECRET)
             if (decoded.type !== 'access') {
