@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 
 const signup = async (req, res) => {
     try {
+        const isProd = process.env.NODE_ENV === 'production'
         const {name, email, password} = req.body
 
         if(await User.findOne({email})){ // check for existingUser
@@ -20,16 +21,16 @@ const signup = async (req, res) => {
 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 15 * 60 * 1000
         })
 
         res.cookie('refreshToken', refreshToken, {
             path: '/api/auth/refresh',
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 30 * 24 * 60 * 60 * 1000
         })
         
@@ -45,6 +46,7 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
     try{
+        const isProd = process.env.NODE_ENV === 'production'
         const {email , password} = req.body;
         const user = await User.findOne({email}).select('+password')
         if(!user || !(await user.comparePasswords(password))){
@@ -56,16 +58,16 @@ const login = async (req, res) => {
 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 15 * 60 * 1000
         })
 
         res.cookie('refreshToken', refreshToken, {
             path: '/api/auth/refresh',
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 30 * 24 * 60 * 60 * 1000
         })
 
@@ -80,16 +82,28 @@ const login = async (req, res) => {
     }
 }
 
-const logout = (req, res) =>{
-    try{
-        res.clearCookie('accessToken', { path: '/' })
-        res.clearCookie('refreshToken', { path: '/api/auth/refresh' })
-        res.status(200).json({ message: 'Log Out Successfully'})
-    }catch(err){
+const logout = (req, res) => {
+    try {
+        const isProd = process.env.NODE_ENV === 'production'
+
+        res.clearCookie('accessToken', {
+            path: '/',
+            httpOnly: true,
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax'
+        })
+
+        res.clearCookie('refreshToken', {
+            path: '/api/auth/refresh',
+            httpOnly: true,
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax'
+        })
+
+        res.status(200).json({ message: 'Log Out Successfully' })
+    } catch (err) {
         res.status(500).json({ message: 'Something went wrong!', error: err.message })
     }
-
-
 }
 
 const refresh = (req, res) => {
@@ -110,8 +124,8 @@ const refresh = (req, res) => {
       const accessToken = generateToken(decoded.userId)
       res.cookies('accessToken', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            secure: isProd,
+            sameSite: isProd ? 'None' : 'Lax',
             maxAge: 15 * 60 * 1000
         })
       res.status(200).json({ message: `welcome Back!`})
