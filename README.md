@@ -31,6 +31,12 @@ Every play, pause, and queue change is instantly broadcast to everyone in the ro
 
 ---
 
+### 🌐 Live Demo
+
+**Application:** https://syncbeats-live.vercel.app
+
+**Repository:** https://github.com/shashankk-singh/syncBeats
+
 ## Features
 
 ### 🎬 Synchronized Playback
@@ -61,9 +67,10 @@ JWT-based authentication with bcrypt password hashing. Protected routes on both 
 | **Player** | YouTube IFrame API |
 | **Realtime** | Socket.io (WebSockets) |
 | **Backend** | Node.js + Express |
-| **Database** | MongoDB + Mongoose |
-| **Auth** | JWT + bcryptjs |
-| **State** | In-memory (Redis-ready architecture) |
+| **Database** | MongoDB Atlas + Mongoose |
+| **Authentication** | JWT + bcryptjs |
+| **State Management** | In-memory (Redis-ready architecture) |
+| **Deployment** | Vercel (Frontend), Render (Backend), MongoDB Atlas |
 
 ---
 
@@ -113,6 +120,7 @@ Create `syncbeats-backend/.env`:
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/syncbeats
 JWT_SECRET=your_secret_here
+FRONTEND_URLS=http://localhost:5173,http://192.168.1.x:5173
 ```
 Create `syncbeats-frontend/.env`:
 
@@ -145,7 +153,6 @@ Open [http://localhost:5173](http://localhost:5173), create a room, share the co
 | Phase 1 — Auth + REST API | ✅ Complete |
 | Phase 2 — Socket.io real-time backend | ✅ Complete |
 | Phase 3 — React frontend + YouTube player | ✅ Complete (v1) |
-| Phase 4 — Monetization + Google OAuth | 🔲 Planned |
 
 ---
 
