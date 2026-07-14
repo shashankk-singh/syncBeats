@@ -4,6 +4,7 @@ const API = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`,
   withCredentials: true
 })
+const excludedPaths = ['/auth/refresh', '/auth/login', '/auth/signup']
 
 API.interceptors.response.use(
   (response) => response,
@@ -14,7 +15,7 @@ API.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
-      if (originalRequest.url.includes('/auth/refresh')) {
+      if (excludedPaths.some(path => originalRequest.url.includes(path))) {
         return Promise.reject(error)
       }
 
@@ -22,7 +23,6 @@ API.interceptors.response.use(
         await API.post('/auth/refresh')
         return API(originalRequest) 
       } catch (refreshError) {
-        window.location.href = '/login'
         return Promise.reject(refreshError)
       }
     }
