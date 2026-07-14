@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
+
+
 
 function Logo({ className }) {
   return (
@@ -131,6 +134,18 @@ const features = [
 
 export default function Landing() {
   const navigate = useNavigate()
+  const { userId, isLoading, authError } = useAuth()
+  const isAuthenticated = !isLoading && !!userId
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard')
+    }
+  }, [isAuthenticated, navigate])
+
+  const handleCreateRoom = () => {
+    navigate(isAuthenticated ? '/dashboard' : '/signup')
+  }
 
   return (
     <div className="min-h-screen bg-[#15120d] relative overflow-hidden text-stone-100">
@@ -159,7 +174,7 @@ export default function Landing() {
               GitHub
             </a>
             <button
-              onClick={() => navigate('/signup')}
+              onClick={handleCreateRoom}
               className="bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 font-bold text-sm px-4 py-2 rounded-lg hover:scale-[1.02] transition-transform"
             >
               Create a room
@@ -190,7 +205,7 @@ export default function Landing() {
 
         <div className="flex items-center justify-center gap-3.5 flex-wrap mb-16">
           <button
-            onClick={() => navigate('/signup')}
+            onClick={handleCreateRoom}
             className="font-bold text-sm px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 hover:scale-[1.02] transition-transform"
           >
             Create a room
@@ -264,7 +279,7 @@ export default function Landing() {
         <p className="text-stone-500 mb-8">Free, no download, works in any browser.</p>
         <div className="flex items-center justify-center gap-3.5 flex-wrap">
           <button
-            onClick={() => navigate('/signup')}
+            onClick={handleCreateRoom}
             className="font-bold text-sm px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-stone-950 hover:scale-[1.02] transition-transform"
           >
             Create a room

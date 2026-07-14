@@ -12,7 +12,7 @@ function useAuth() {
         const response = await getMe()
         setUserId(response.data.details._id)
       } catch (err) {
-        setError('User not logged in')
+        setAuthError('User not logged in')
       } finally {
         setIsLoading(false)
       }
