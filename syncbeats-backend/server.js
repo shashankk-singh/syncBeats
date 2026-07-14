@@ -1,4 +1,3 @@
-app.set('trust proxy', 1)
 require('dotenv').config()
 const express = require('express')
 const app = express()
@@ -13,6 +12,7 @@ const connectDB = require('./src/config/dataBase')
 const mongoSanitize = require('express-mongo-sanitize')
 const { rateLimit } = require('express-rate-limit')
 const helmet = require('helmet')
+app.set('trust proxy', 1)
 
 
 //wrapping the express app for sockets.io since they supports native Node HTTP server
