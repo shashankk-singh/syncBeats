@@ -402,9 +402,10 @@ return (
                     </span>
 
                     <button
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation()
                         removeFromQueue({ videoId: item.videoId })
-                      }
+                      }}
                       className="
                         w-7 h-7
                         flex

@@ -48,6 +48,7 @@ function Player({ videoId, socket }) {
 
     useEffect(() => {
         if(!player){return}
+        if (!videoId) {return}
         if(prevVideoId.current !== videoId){
             player.loadVideoById(videoId)
             prevVideoId.current = videoId
