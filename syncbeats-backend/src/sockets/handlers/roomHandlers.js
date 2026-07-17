@@ -27,10 +27,10 @@ const joinRoom = async (socket, roomCode) => {
 }
 
     addUserToRoom(roomCode, { socketId: socket.id, userId: socket.userId, username: user.name })
-    socket.join(roomCode) 
+    socket.join(roomCode)
 
     //sync-state
-    socket.emit("sync-state", getRoomState(roomCode))
+    socket.emit("sync-state", {...getRoomState(roomCode),roomName: room.name})
 
 
     socket.broadcast.to(roomCode).emit('user-joined', {message: `${user.name}-joined`, state: getRoomState(roomCode)})
@@ -69,8 +69,5 @@ module.exports = (io, socket) => {
     })
     socket.on("disconnect", () => {  //when user is offline auto trigger
         leaveRoom(socket)
-    })
-    socket.on("get-roomName", async({roomCode}) => {
-        await getRoomName(io,socket,roomCode)
     })
 }

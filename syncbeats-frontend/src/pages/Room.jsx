@@ -67,12 +67,12 @@ function Room() {
   useEffect(() => {
     if (!socket) return
     socket.emit('join-room', { roomCode: code })
-    socket.emit('get-roomName', { roomCode: code });
 
     socket.on('sync-state', (data) => {
     setUsers(data.users)
     setPlayback(data.playback)
     setQueue(data.queue)
+    setRoomName(data.roomName)
     })
 
     socket.on('user-joined', (data) => {
@@ -107,9 +107,6 @@ function Room() {
       setQueue(data)
     })
 
-    socket.on('RoomName', (data) => {
-      setRoomName(data.roomName)
-    })
 
     return () => {
     socket.off('sync-state')
