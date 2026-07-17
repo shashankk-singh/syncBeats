@@ -33,7 +33,8 @@ Every play, pause, and queue change is instantly broadcast to everyone in the ro
 
 ### 🌐 Live Demo
 
-**Application:** https://syncbeats-live.vercel.app
+**Application:** https://plex.thebox7.duckdns.org/
+
 
 **Repository:** https://github.com/shashankk-singh/syncBeats
 
@@ -55,8 +56,7 @@ Create a room and get a unique shareable code (e.g. `MOOD-PtZOWnD3`). Share the 
 See who's in the room in real-time. The user list updates the moment someone joins or leaves — no refresh required.
 
 ### 🔐 Auth
-JWT-based authentication with bcrypt password hashing. Protected routes on both REST API and Socket.io connection layer.
-
+JWT-based authentication with bcrypt password hashing, HTTP-only cookies, refresh-token based session persistence, and protected REST and Socket.io routes.
 ---
 
 ## Tech Stack
@@ -70,7 +70,7 @@ JWT-based authentication with bcrypt password hashing. Protected routes on both 
 | **Database** | MongoDB Atlas + Mongoose |
 | **Authentication** | JWT + bcryptjs |
 | **State Management** | In-memory (Redis-ready architecture) |
-| **Deployment** | Vercel (Frontend), Render (Backend), MongoDB Atlas |
+| **Deployment** | Oracle Cloud VPS (Ubuntu + Nginx + PM2), MongoDB Atlas |
 
 ---
 
